@@ -8,9 +8,14 @@ export function ModalEmployee ({ employee, isEdit }) {
   const [inputEmail, setInputEmail] = useState('')
 
   useEffect(() => {
-    setInputName(employee.name)
+    if(isEdit){
+    setInputName(employee.name) 
     setInputEmail(employee.email)
-  }, [edit])
+    } else {
+      setInputName('') 
+      setInputEmail('')
+    }
+  }, [edit, isEdit])
 
   const handleName = (e) => {
     setInputName(e.target.value)
@@ -28,8 +33,14 @@ export function ModalEmployee ({ employee, isEdit }) {
       id: employee.id,
       password: employee.password
     }
+    const obj = {
+      admin: data.roles === 'admin',
+      waiter: data.roles === 'waiter',
+      chef: data.roles === 'chef'
+    }
     data.email = inputEmail
     data.name = inputName
+    data.roles = obj
     const options = {
       method: 'PUT',
       body: JSON.stringify(data),
@@ -44,6 +55,14 @@ export function ModalEmployee ({ employee, isEdit }) {
     const data = {
       ...fields
     }
+    const obj = {
+      admin: data.roles === 'admin',
+      waiter: data.roles === 'waiter',
+      chef: data.roles === 'chef'
+    }
+    data.roles = obj
+    data.email = inputEmail
+    data.name = inputName
     const options = {
       method: 'POST',
       body: JSON.stringify(data),
@@ -52,6 +71,7 @@ export function ModalEmployee ({ employee, isEdit }) {
     fetch('http://localhost:3004/users', options)
     swal('Usuario agregado', '', 'success')
     setEdit(!edit)
+    e.target.reset()
   }
   return (
 
@@ -89,20 +109,20 @@ export function ModalEmployee ({ employee, isEdit }) {
               : <form onSubmit={addEmployee}>
                 <div className='mb-3'>
                   <label htmlFor='formGroupExampleInput' className='form-label'>Nombre</label>
-                  <input type='text' className='form-control' name='name' id='formGroupExampleInput' placeholder='Nombre' />
+                  <input type='text' className='form-control' name='name' onChange={handleName} value={inputName} id='formGroupExampleInput' placeholder='Nombre' />
+                </div>
+                <div className='mb-3'>
+                  <label htmlFor='formGroupExampleInput' className='form-label'> e-mail</label>
+                  <input type='text' className='form-control' name='email' onChange={handleEmail} value={inputEmail} id='formGroupExampleInput' placeholder='nombre@burgerqueen.com' />
                 </div>
                 <div className='mb-3'>
                   <label htmlFor='formGroupExampleInput2' className='form-label'>Contraseña</label>
                   <input type='text' className='form-control' name='password' id='formGroupExampleInput2' placeholder='Contraseña' />
                 </div>
                 <div className='mb-3'>
-                  <label htmlFor='formGroupExampleInput' className='form-label'> e-mail</label>
-                  <input type='text' className='form-control' name='email' id='formGroupExampleInput' placeholder='nombre@burgerqueen.com' />
-                </div>
-                <div className='mb-3'>
                   <label htmlFor='formGroupExampleInput2' className='form-label'>Rol empleado</label>
                   <select className='form-select' name='roles' fields aria-label='Default select example'>
-                    <option selected>Selecciona el rol del empleado:</option>
+                    <option value>Selecciona el rol del empleado:</option>
                     <option value='chef'>Chef</option>
                     <option value='waiter'>Mesero</option>
                     <option value='admin'>Administrador</option>

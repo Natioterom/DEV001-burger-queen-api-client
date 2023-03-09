@@ -45,7 +45,7 @@ export const EmployeeList = () => {
     setEdit(!edit)
   }
 
-  const handleAdd = () => {
+  const handleAdd = (e) => {
     setIsEdit(false)
   }
   const handleEdit = (worker) => {
@@ -78,9 +78,9 @@ export const EmployeeList = () => {
                           <td className='celdas'>{worker.name}</td>
                           <td className='celdas'>{worker.email}</td>
                           <td className='celdas'>{
-                          worker.roles === 'admin'
+                          worker.roles.admin
                             ? 'Admin'
-                            : worker.roles === 'chef'
+                            : worker.roles.chef
                               ? 'Chef'
                               : 'Mesero'
 }

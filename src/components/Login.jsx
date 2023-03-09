@@ -7,18 +7,9 @@ export default function Login ({ path, useNavigate }) {
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  console.log('Holiiii')
-
   const [error, setError] = useState(false)
 
-  window.localStorage.clear()
-
   const onSubmit = async (data, e) => {
-
-    console.log('olo')
-    // e.target.reset()
-
-    console.log('Entro a onSubmit')
     e.target.reset()
 
     const options = {
@@ -29,14 +20,16 @@ export default function Login ({ path, useNavigate }) {
 
     try {
       const fetchUser = await fetch('http://localhost:3004/login', options)
+      console.log(fetchUser)
       const resLogin = await fetchUser.json()
 
       if (typeof resLogin !== 'object') throw new Error({ message: resLogin })
 
-      const user = window.sessionStorage.setItem('user', JSON.stringify(resLogin))
-      login(user)
-
+      window.sessionStorage.setItem('user', JSON.stringify(resLogin))
+      login()
+       
       const roles = resLogin.user.roles
+      console.log(roles)
       if (roles.admin) {
         navigate('/admin')
       } else if (roles.waiter) {
