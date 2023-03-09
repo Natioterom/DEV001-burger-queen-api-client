@@ -37,7 +37,7 @@ function App () {
         <Route path='/chef' element={<PrivateRoute isAlowed={user && user.user.roles.chef}><Chef /></PrivateRoute>} />
         <Route
           path='/admin' element={<PrivateRoute isAlowed={user && user.user.roles.admin}><AdminHome /></PrivateRoute>}
-
+         />
         <Route
           path='/mesero/orders'
           element={<PrivateRoute isAlowed={user && user.user.roles.waiter}><Pedidos /> </PrivateRoute>}
