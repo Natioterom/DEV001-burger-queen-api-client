@@ -970,6 +970,30 @@
       "idWaiter": 5,
       "date": "2023-03-08T21:38:51.352Z",
       "id": 47
+    },
+    {
+      "state": "Pendiente",
+      "clientName": "Nati",
+      "order": [
+        {
+          "cost": 7,
+          "productName": "Café con leche",
+          "quantity": 1
+        },
+        {
+          "cost": 10,
+          "productName": "Sandiwich jamón y queso",
+          "quantity": 1
+        },
+        {
+          "cost": 5,
+          "productName": "Café americano",
+          "quantity": 3
+        }
+      ],
+      "idWaiter": 14,
+      "date": "2023-03-09T17:36:58.674Z",
+      "id": 48
     }
   ]
 }

@@ -53,7 +53,7 @@ export function ModalProducts ({ name, price, product, isEdit }) {
     fetch('http://localhost:3000/products', options)
     swal('Producto agregado', '', 'success')
     setEdit(!edit)
-    console.log(fields)
+    e.target.reset()
   }
   return (
 
