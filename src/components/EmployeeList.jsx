@@ -9,6 +9,7 @@ export const EmployeeList = () => {
   const [isEdit, setIsEdit] = useState(null)
   const { edit, setEdit } = useContext(ProductContext)
   const employee = useRef('')
+  // const formDom = useRef(null)
 
   useEffect(() => {
     const petition = async () => {
@@ -47,13 +48,14 @@ export const EmployeeList = () => {
 
   const handleAdd = (e) => {
     setIsEdit(false)
+    // console.log(formDom.current)
   }
   const handleEdit = (worker) => {
     employee.current = worker
     setEdit(!edit)
     setIsEdit(true)
   }
-  console.log(employee.current)
+
   return (
     <><button type='button' className='btn btn-success' data-bs-toggle='modal' data-bs-target='#staticBackdrop' onClick={handleAdd}>Agregar Empleado</button>
       <article className='container-employee'>
