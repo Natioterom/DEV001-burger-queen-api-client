@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { useAuth } from './useAuth'
 import React, { useState } from 'react'
 
+
 export default function Login ({ path, useNavigate }) {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const { login } = useAuth()
@@ -19,15 +20,14 @@ export default function Login ({ path, useNavigate }) {
     }
 
     try {
-      const fetchUser = await fetch('http://localhost:3004/login', options)
-      console.log(fetchUser)
+      const fetchUser = await fetch('https://api-rest-three.vercel.app/login', options)
       const resLogin = await fetchUser.json()
-
+      console.log(fetchUser, resLogin)
       if (typeof resLogin !== 'object') throw new Error({ message: resLogin })
 
       window.sessionStorage.setItem('user', JSON.stringify(resLogin))
       login()
-       
+
       const roles = resLogin.user.roles
       console.log(roles)
       if (roles.admin) {

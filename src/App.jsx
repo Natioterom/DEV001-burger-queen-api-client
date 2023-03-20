@@ -17,14 +17,14 @@ import { useAuth } from './components/useAuth'
 function App () {
   useAuth()
   const user = JSON.parse(window.sessionStorage.getItem('user'))
-
+ 
   return (
     <section className='App'>
       <Header />
       <Routes>
         <Route
           path='/' element={(<Login
-            path='../public/images/burger-login.jfif'
+            path={('public/images/burger-login.jfif')}
             useNavigate={useNavigate}
                              />)}
         />

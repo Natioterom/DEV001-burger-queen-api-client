@@ -17,12 +17,12 @@ export const Chef = () => {
   }
   useEffect(() => {
     const data = async () => {
-      const res = await fetch('http://localhost:3001/orders')
+      const res = await fetch('https://api-rest-three.vercel.app/orders')
       const data = await res.json()
       setDb(data)
     }
     data()
-  }, [db])
+  }, [isSnapshot])
 
   const day = JSON.stringify(new Date()).slice(1, 11)
   const dbDate = db.filter(el => el.date.slice(0, 10) === day)

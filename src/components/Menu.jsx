@@ -4,8 +4,9 @@ import { useState, useEffect, useContext } from 'react'
 import ProductContext from './DataContext'
 import { Orders } from './Orders'
 import { Check } from './Check'
+import { useNavigate } from 'react-router'
 
-function Menu ({ useNavigate }) {
+function Menu () {
   const [db, setDb] = useState([])
   const [inputName, setInputName] = useState('')
   const [isBreackFast, setIsBreackFast] = useState(true)
@@ -19,7 +20,7 @@ function Menu ({ useNavigate }) {
   useEffect(() => {
     // Consultar y guardar la data
     const getData = async () => {
-      const res = await fetch('http://localhost:3000/products')
+      const res = await fetch('https://api-rest-three.vercel.app/products')
       const data = await res.json()
       setDb(data)
     }
@@ -81,7 +82,7 @@ function Menu ({ useNavigate }) {
       body: JSON.stringify(data),
       headers: { 'content-type': 'application/json' }
     }
-    fetch('http://localhost:3001/orders', options)
+    fetch('https://api-rest-three.vercel.app/orders', options)
     setItems([])
     setInputName('')
     swal('Pedido enviado a cocina', '', 'success')

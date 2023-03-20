@@ -12,7 +12,7 @@ export const Pedidos = () => {
   const [isSnapshot, setIsSnapshot] = useState(false)
 
   useEffect(() => {
-    fetch('http://localhost:3001/orders')
+    fetch('https://api-rest-three.vercel.app/orders')
       .then(res => res.json())
       .then(res => setOrdersDb(res))
   }, [isSnapshot])

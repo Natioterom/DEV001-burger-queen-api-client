@@ -34,7 +34,7 @@ export function ModalProducts ({ name, price, product, isEdit }) {
       body: JSON.stringify(data),
       headers: { 'content-type': 'application/json' }
     }
-    await fetch(`http://localhost:3000/products/${id}`, options)
+    await fetch(`https://api-rest-three.vercel.app/products/${id}`, options)
     setEdit(!edit)
   }
   const addProduct = (e) => {
@@ -50,7 +50,7 @@ export function ModalProducts ({ name, price, product, isEdit }) {
       body: JSON.stringify(data),
       headers: { 'content-type': 'application/json' }
     }
-    fetch('http://localhost:3000/products', options)
+    fetch('https://api-rest-three.vercel.app/products', options)
     swal('Producto agregado', '', 'success')
     setEdit(!edit)
     e.target.reset()

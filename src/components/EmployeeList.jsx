@@ -13,7 +13,7 @@ export const EmployeeList = () => {
 
   useEffect(() => {
     const petition = async () => {
-      const data = await fetch('http://localhost:3004/users')
+      const data = await fetch('https://api-rest-three.vercel.app/users')
       const res = await data.json()
       setDb(res)
     }
@@ -34,7 +34,7 @@ export const EmployeeList = () => {
             body: JSON.stringify(db),
             headers: { 'content-type': 'application/json' }
           }
-          fetch(`http://localhost:3004/users/${id}`, option)
+          fetch(`https://api-rest-three.vercel.app/users/${id}`, option)
           setBorrar(!borrar)
           swal('El usuario ha sido eliminado!', {
             icon: 'success'
