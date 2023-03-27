@@ -24,7 +24,7 @@ function App () {
       <Routes>
         <Route
           path='/' element={(<Login
-            path='public/images/burger-login.jfif'
+            path='images/burger-login.jfif'
             useNavigate={useNavigate}
                              />)}
         />
