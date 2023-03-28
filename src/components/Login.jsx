@@ -20,9 +20,8 @@ export default function Login ({ path, useNavigate }) {
     }
 
     try {
-      const fetchUser = await fetch(' http://localhost:3004/users/login', options)
+      const fetchUser = await fetch(' http://localhost:3004/login', options)
       const resLogin = await fetchUser.json()
-      console.log(fetchUser, resLogin)
       if (typeof resLogin !== 'object') throw new Error({ message: resLogin })
 
       window.sessionStorage.setItem('user', JSON.stringify(resLogin))

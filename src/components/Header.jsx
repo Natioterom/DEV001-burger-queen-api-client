@@ -13,7 +13,7 @@ export const Header = () => {
 
   return (
     <header className='header-container'>
-      <img className='img-logo' src={('images/logo.png')} />
+      <img className='img-logo' src='images/logo.png' />
       <h1>BURGER QUEEN</h1>
       <span onClick={sessionOut} className={`icon-sign-out ${classIcon}`} />
     </header>

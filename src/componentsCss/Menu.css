@@ -100,3 +100,16 @@ font-size: larger;
 .container-group {
     width: 50%;
 }
+@media (min-width: 1025px) {
+    .icon-bell{ 
+        margin-left :1050px;
+        }
+    
+  }
+  @media (max-width: 1024px) {
+    .icon-bell{ 
+        margin-left :650px;
+        }
+    
+  }
+  

@@ -6,6 +6,7 @@ export function ModalEmployee ({ employee, isEdit }) {
   const [inputName, setInputName] = useState('')
   const [inputEmail, setInputEmail] = useState('')
   const [inputPassword, setInputPassword] = useState(null)
+
   useEffect(() => {
     const prueba = () => {
       if (isEdit) {
@@ -53,7 +54,7 @@ export function ModalEmployee ({ employee, isEdit }) {
       headers: { 'content-type': 'application/json' }
     }
     try {
-      const res = await fetch(`https://api-rest-three.vercel.app/users/${id}`, options)
+      const res = await fetch(` http://localhost:3004/users/${id}`, options)
       if (!res.ok || res.status >= 400) {
         throw new Error(res.status)
       } else {
@@ -83,7 +84,7 @@ export function ModalEmployee ({ employee, isEdit }) {
       body: JSON.stringify(data),
       headers: { 'content-type': 'application/json' }
     }
-    fetch('https://api-rest-three.vercel.app/users', options)
+    fetch('http://localhost:3004/users', options)
     swal('Usuario agregado', '', 'success')
     setEdit(!edit)
     // formDom.current = e.target
