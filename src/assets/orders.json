@@ -994,6 +994,106 @@
       "idWaiter": 14,
       "date": "2023-03-09T17:36:58.674Z",
       "id": 48
+    },
+    {
+      "state": "Entregado",
+      "clientName": "meme",
+      "order": [
+        {
+          "cost": 7,
+          "productName": "Café con leche",
+          "quantity": 1
+        },
+        {
+          "cost": 10,
+          "productName": "Sandiwich jamón y queso",
+          "quantity": 2
+        }
+      ],
+      "idWaiter": 10,
+      "date": "2026-03-30T19:40:46.176Z",
+      "tiempo": " 0 : 0 : 0",
+      "id": 49
+    },
+    {
+      "state": "Entregado",
+      "clientName": "meme",
+      "order": [
+        {
+          "cost": 7,
+          "productName": "Café con leche",
+          "quantity": 4
+        },
+        {
+          "cost": 10,
+          "productName": "Sandiwich jamón y queso",
+          "quantity": 1
+        }
+      ],
+      "idWaiter": 10,
+      "date": "2026-03-30T19:45:43.305Z",
+      "tiempo": " 0 : 0 : 9",
+      "id": 50
+    },
+    {
+      "state": "Entregado",
+      "clientName": "bb",
+      "order": [
+        {
+          "cost": 10,
+          "productName": "Bebida 750 ml",
+          "quantity": 2
+        },
+        {
+          "cost": 10,
+          "productName": "Sandiwich jamón y queso",
+          "quantity": 1
+        },
+        {
+          "cost": 7,
+          "productName": "Jugo natural",
+          "quantity": 1
+        },
+        {
+          "cost": "10",
+          "productName": "Limonada",
+          "quantity": 1
+        }
+      ],
+      "idWaiter": 10,
+      "date": "2026-03-30T19:59:14.363Z",
+      "tiempo": " 0 : 0 : 1",
+      "id": 51
+    },
+    {
+      "state": "Entregado",
+      "clientName": "pp",
+      "order": [
+        {
+          "cost": 10,
+          "productName": "Bebida 750 ml",
+          "quantity": 1
+        },
+        {
+          "cost": 7,
+          "productName": "Agua 750 ml",
+          "quantity": 1
+        },
+        {
+          "cost": 5,
+          "productName": "Agua 500 ml",
+          "quantity": 5
+        },
+        {
+          "cost": 5,
+          "productName": "Aros de cebolla",
+          "quantity": 1
+        }
+      ],
+      "idWaiter": 10,
+      "date": "2026-03-30T20:13:20.981Z",
+      "tiempo": " 0 : 0 : 1",
+      "id": 52
     }
   ]
 }

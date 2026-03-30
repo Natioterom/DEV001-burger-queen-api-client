@@ -1,155 +1,115 @@
 import swal from 'sweetalert'
-import { useContext, useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import ProductContext from './DataContext'
-export function ModalEmployee ({ employee, isEdit }) {
-  const { edit, setEdit } = useContext(ProductContext)
-  const [inputName, setInputName] = useState('')
-  const [inputEmail, setInputEmail] = useState('')
-  const [inputPassword, setInputPassword] = useState(null)
+
+export function ModalEmployee ({ isEdit }) {
+  const { setEdit, currentEmployee } = useContext(ProductContext)
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [role, setRole] = useState('')
 
   useEffect(() => {
-    const prueba = () => {
-      if (isEdit) {
-        setInputName(employee.name)
-        setInputEmail(employee.email)
-        setInputPassword('')
-      } else {
-        setInputName('')
-        setInputEmail('')
-        setInputPassword('')
-      }
+    if (isEdit && currentEmployee) {
+      // Modo editar: cargamos datos del empleado
+      setName(currentEmployee.name)
+      setEmail(currentEmployee.email)
+      setPassword('') // nunca mostrar la contraseña real
+      setRole(currentEmployee.roles.admin ? 'admin' : currentEmployee.roles.chef ? 'chef' : 'waiter')
+    } else {
+      // Modo agregar: limpiamos campos
+      setName('')
+      setEmail('')
+      setPassword('')
+      setRole('')
     }
-    prueba()
-  }, [edit, isEdit])
-  const handleName = (e) => {
-    setInputName(e.target.value)
-  }
-  const handleEmail = (e) => {
-    setInputEmail(e.target.value)
-  }
-  const handlePassword = (e) => {
-    setInputPassword(e.target.value)
-  }
+  }, [isEdit, currentEmployee])
+
+  // Editar empleado
   const editEmployee = async (e) => {
     e.preventDefault()
-    const id = employee.id
-    const fields = Object.fromEntries(new window.FormData(e.target))
-    console.log(fields)
     const data = {
-      ...fields,
-      id: employee.id
-    }
-    const obj = {
-      admin: data.roles === 'admin',
-      waiter: data.roles === 'waiter',
-      chef: data.roles === 'chef'
-    }
-    data.roles = obj
-    data.email = inputEmail
-    data.name = inputName
-    data.password = inputPassword
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify(data),
-      headers: { 'content-type': 'application/json' }
-    }
-    try {
-      const res = await fetch(` http://localhost:3004/users/${id}`, options)
-      if (!res.ok || res.status >= 400) {
-        throw new Error(res.status)
-      } else {
-        swal('Usuario actualizado', '', 'success')
+      name,
+      email,
+      password,
+      roles: {
+        admin: role === 'admin',
+        chef: role === 'chef',
+        waiter: role === 'waiter'
       }
-      setEdit(!edit)
-    } catch (error) {
-      swal('Todos los campos son requeridos', '', 'error')
     }
+
+    await fetch(`https://api-rest-three.vercel.app/users/${currentEmployee.id}`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+
+    swal('Usuario actualizado!', '', 'success')
+    setEdit(prev => !prev)
   }
-  const addEmployee = (e) => {
+
+  // Agregar empleado
+  const addEmployee = async (e) => {
     e.preventDefault()
-    const fields = Object.fromEntries(new window.FormData(e.target))
     const data = {
-      ...fields
+      name,
+      email,
+      password,
+      roles: {
+        admin: role === 'admin',
+        chef: role === 'chef',
+        waiter: role === 'waiter'
+      }
     }
-    const obj = {
-      admin: data.roles === 'admin',
-      waiter: data.roles === 'waiter',
-      chef: data.roles === 'chef'
-    }
-    data.roles = obj
-    data.email = inputEmail
-    data.name = inputName
-    const options = {
+
+    await fetch('https://api-rest-three.vercel.app/users', {
       method: 'POST',
-      body: JSON.stringify(data),
-      headers: { 'content-type': 'application/json' }
-    }
-    fetch('http://localhost:3004/users', options)
-    swal('Usuario agregado', '', 'success')
-    setEdit(!edit)
-    // formDom.current = e.target
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+
+    swal('Usuario agregado!', '', 'success')
+    setEdit(prev => !prev)
   }
+
   return (
-    <div className='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabIndex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+    <div className='modal fade' id='employeeModal' tabIndex='-1' aria-hidden='true'>
       <div className='modal-dialog'>
         <div className='modal-content'>
           <div className='modal-header'>
-            <h1 className='modal-title fs-5' id='staticBackdropLabel'>Modal title</h1>
-            <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' />
+            <h5 className='modal-title'>{isEdit ? 'Editar Empleado' : 'Agregar Empleado'}</h5>
+            <button type='button' className='btn-close' data-bs-dismiss='modal' />
           </div>
-          <div className='modal-body'>
-            {isEdit
-              ? <>
-                <form onSubmit={editEmployee}>
-                  <div className='mb-3'>
-                    <label htmlFor='formGroupExampleInput' className='form-label'>Nombre</label>
-                    <input type='text' className='form-control' onChange={handleName} value={inputName} name='name' id='formGroupExampleInput' placeholder='Nombre' />
-                  </div>
-                  <div className='mb-3'>
-                    <label htmlFor='formGroupExampleInput' className='form-label'> e-mail</label>
-                    <input type='text' className='form-control' onChange={handleEmail} value={inputEmail} name='email' id='formGroupExampleInput' placeholder='nombre@burgerqueen.com' />
-                  </div>
-                  <div className='mb-3'>
-                    <label htmlFor='formGroupExampleInput2' className='form-label'>Contraseña</label>
-                    <input type='text' className='form-control' name='password' id='formGroupExampleInput2' placeholder='Contraseña' onChange={handlePassword} value={inputPassword} />
-                  </div>
-                  <div className='mb-3'>
-                    <label htmlFor='formGroupExampleInput2' className='form-label'>Rol empleado</label>
-                    <select className='form-select' name='roles' fields aria-label='Default select example'>
-                      <option value>Selecciona el rol del empleado:</option>
-                      <option value='chef'>Chef</option>
-                      <option value='waiter'>Mesero</option>
-                      <option value='admin'>Administrador</option>
-                    </select>
-                  </div>
-                  <button type='submit' className='btn btn-primary' data-bs-dismiss='modal'>Guardar</button>
-                </form>
-                </>
-              : <form className='formDom' onSubmit={addEmployee}>
-                <div className='mb-3'>
-                  <label htmlFor='formGroupExampleInput' className='form-label'>Nombre</label>
-                  <input type='text' className='form-control' name='name' id='formGroupExampleInput' placeholder='Nombre' onChange={handleName} value={inputName} />
-                </div>
-                <div className='mb-3'>
-                  <label htmlFor='formGroupExampleInput' className='form-label'> e-mail</label>
-                  <input type='text' className='form-control' name='email' id='formGroupExampleInput' placeholder='nombre@burgerqueen.com' onChange={handleEmail} value={inputEmail} />
-                </div>
-                <div className='mb-3'>
-                  <label htmlFor='formGroupExampleInput2' className='form-label'>Contraseña</label>
-                  <input type='text' className='form-control' name='password' id='formGroupExampleInput2' placeholder='Contraseña' />
-                </div>
-                <div className='mb-3'>
-                  <label htmlFor='formGroupExampleInput2' className='form-label'>Rol empleado</label>
-                  <select className='form-select' name='roles' fields aria-label='Default select example'>
-                    <option selected>Selecciona el rol del empleado:</option>
-                    <option value='chef'>Chef</option>
-                    <option value='waiter'>Mesero</option>
-                    <option value='admin'>Administrador</option>
-                  </select>
-                </div>
-                <button type='submit' className='btn btn-primary' data-bs-dismiss='modal'>Guardar</button>
-                </form>}
-          </div>
+          <form onSubmit={isEdit ? editEmployee : addEmployee}>
+            <div className='modal-body'>
+              <div className='mb-3'>
+                <label className='form-label'>Nombre</label>
+                <input className='form-control' value={name} onChange={e => setName(e.target.value)} required />
+              </div>
+              <div className='mb-3'>
+                <label className='form-label'>Email</label>
+                <input className='form-control' value={email} onChange={e => setEmail(e.target.value)} required />
+              </div>
+              <div className='mb-3'>
+                <label className='form-label'>Contraseña</label>
+                <input className='form-control' type='password' value={password} onChange={e => setPassword(e.target.value)} required={!isEdit} />
+              </div>
+              <div className='mb-3'>
+                <label className='form-label'>Rol</label>
+                <select className='form-select' value={role} onChange={e => setRole(e.target.value)} required>
+                  <option value=''>Selecciona rol</option>
+                  <option value='admin'>Admin</option>
+                  <option value='chef'>Chef</option>
+                  <option value='waiter'>Mesero</option>
+                </select>
+              </div>
+            </div>
+            <div className='modal-footer'>
+              <button type='submit' className='btn btn-primary' data-bs-dismiss='modal'>{isEdit ? 'Guardar cambios' : 'Agregar'}</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

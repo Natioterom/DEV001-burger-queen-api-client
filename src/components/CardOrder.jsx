@@ -48,7 +48,7 @@ export function CardOrder ({ id, list, clientName, idWaiter, order, date, text, 
       body: JSON.stringify(data),
       headers: { 'content-type': 'application/json' }
     }
-    await fetch(`https://api-rest-three.vercel.app/orders/${id}`, options)
+    await fetch(`http://localhost:3001/orders/${id}`, options)
     setFinish(true)
     setIsPaused(true)
     swal('Pedido enviado', '', 'success')
@@ -72,7 +72,7 @@ export function CardOrder ({ id, list, clientName, idWaiter, order, date, text, 
       body: JSON.stringify(data),
       headers: { 'content-type': 'application/json' }
     }
-    fetch(`https://api-rest-three.vercel.app/orders/${id}`, options)
+    fetch(`http://localhost:3001/orders/${id}`, options)
 
     setFinish(true)
     swal('Pedido entregado', '', 'success')

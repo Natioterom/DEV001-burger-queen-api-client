@@ -11,15 +11,13 @@ export const AdminHome = () => {
   const handleProducts = () => {
     setShowEmployee(false)
   }
-
-
   return (
     <section className='container-admin'>
       <div className='admin-button'>
         <button className='button-employee' onClick={handleEmploye}> Empleados</button>
         <button className='button-products' onClick={handleProducts}> Productos</button>
       </div>
-      <div className='button-add'>
+      <div className='table-card'>
         {showEmployee ? <EmployeeList /> : <ProductList />}
       </div>
     </section>

@@ -1,24 +1,71 @@
-.admin-button{
-    display:flex;
-    align-items: flex-start;
-   flex-direction: row;
-   width: 100%;  
-}
-.btn-success{
-    margin: 10px 0px;
-
-}
-.container-employee{
-    background-color: white;
-    border-radius: 10px;
-    border: 1px solid rgb(175, 170, 170);
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    padding:10px;
-    margin-bottom: 40px;
-}
-
-.button-add{
-    display:flex;
+.container-admin {
+    padding: 2rem;
+    min-height: calc(100vh - 70px);
+    display: flex;
     flex-direction: column;
-    align-items: end;
+    align-items: center;
+}
+
+.admin-button {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.button-employee,
+.button-products {
+    background-color: #FFBD59;
+    color: #000;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.button-employee:hover,
+.button-products:hover {
+    background-color: #f46919;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.table-card {
+    background-color: #ffffff6b;
+    border-radius: 20px;
+    padding: 0.5rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.table-card table {
+    margin-top: 1rem;
+}
+
+.table-card thead th {
+    background-color: #f8f9fa !important;
+    border-bottom: 3px solid #FFBD59 !important;
+    color: #333;
+    font-weight: 700;
+}
+
+.table-card .btn {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin: 5px;
+    width: 45%;
+}
+
+.table-card .btn-outline-danger:hover {
+    background-color: #e74c3c;
 }

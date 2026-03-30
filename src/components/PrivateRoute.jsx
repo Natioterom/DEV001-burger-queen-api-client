@@ -4,16 +4,18 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from './useAuth'
 
 export const PrivateRoute = ({ children, isAlowed }) => {
-  const user = JSON.parse(window.sessionStorage.getItem('user'))
-  const { login } = useAuth()
-
-  useEffect(() => {
-    login()
-  }, [])
+  const { user: authUser } = useAuth()
+  // Verificamos tanto el contexto como el storage para persistencia al refrescar
+  const user = authUser || JSON.parse(window.sessionStorage.getItem('user'))
 
   if (!user) {
     return <Navigate to='/' />
   }
 
-  return isAlowed ? children : swal('Autorización invalida', '', 'error') && user.user.roles.waiter ? <Navigate to='/mesero' /> : <Navigate to='/chef' />
+  if (!isAlowed) {
+    // Si no tiene permisos, lo mandamos al login para evitar el bucle en la misma ruta
+    return <Navigate to='/' />
+  }
+
+  return children
 }

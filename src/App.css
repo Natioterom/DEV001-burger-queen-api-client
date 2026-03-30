@@ -2,21 +2,91 @@
     background-color: #FFBD59;
     width: 100%;    
     display: flex;
-    flex: 1 1;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
+    padding: 0 2rem;
+    height: 80px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1000;
 }
+
+.title-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.bell-container {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .img-logo{
-    width: 70px;   
+    width: 60px;   
     object-fit: cover;
 }
-.showIcon {
-    display: block;
-    font-size: 1.6rem;
+
+.bell-icon {
+    font-size: 1.8rem;
+    transition: all 0.3s ease;
 }
-.hideIcon {
-    visibility: hidden;
+
+.bell-container:hover .bell-icon {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.notification-badge {
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #FFBD59;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-logout {
+    background-color: #f46919;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    font-family: 'Maven Pro', sans-serif;
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.icon-sign-out {
+    font-size: 1.2rem;
 }
 
 /* ----- ORDERS -------*/

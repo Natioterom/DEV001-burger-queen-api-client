@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router'
 import { CardOrder } from './CardOrder'
 
 export const Pedidos = () => {
-
   const navigate = useNavigate()
 
   // Vista de pedidos terminados del mesero
@@ -12,9 +11,9 @@ export const Pedidos = () => {
   const [isSnapshot, setIsSnapshot] = useState(false)
 
   useEffect(() => {
-    fetch('https://api-rest-three.vercel.app/orders')
+    fetch('http://localhost:3001/orders')
       .then(res => res.json())
-      .then(res => setOrdersDb(res))
+      .then(res => setOrdersDb(res || [])) // Asegurar array vacío si la carga falla
   }, [isSnapshot])
 
   useEffect(() => {
@@ -24,9 +23,12 @@ export const Pedidos = () => {
     }
   }, [])
 
-  setTimeout(() => {
-    setIsSnapshot(!isSnapshot)
-  }, 300000)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsSnapshot(prev => !prev)
+    }, 30000) // Actualizar cada 30 segundos
+    return () => clearInterval(interval)
+  }, [])
 
   const handleIsSnapshot = () => {
     setIsSnapshot(!isSnapshot)

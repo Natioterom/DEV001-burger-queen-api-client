@@ -1,23 +1,26 @@
-
 import React, { createContext, useContext, useState } from 'react'
 
 const AuthContext = createContext()
 
 export function useAuth () {
-  const auth = useContext(AuthContext)
-  return auth
+  return useContext(AuthContext)
 }
 
 export function AuthProvider ({ children }) {
   const [user, setUser] = useState(null)
 
-  const login = () => {
-    setUser(true)
+  const login = (mockUser) => {
+    // Puedes pasar el usuario mock directamente
+    setUser(mockUser)
   }
+
   const logOut = () => {
     setUser(null)
   }
+
   return (
-    <AuthContext.Provider value={{ user, login, logOut }}> {children} </AuthContext.Provider>
+    <AuthContext.Provider value={{ user, login, logOut }}>
+      {children}
+    </AuthContext.Provider>
   )
 }

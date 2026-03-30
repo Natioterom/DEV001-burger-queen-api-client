@@ -17,7 +17,7 @@ import { useAuth } from './components/useAuth'
 function App () {
   useAuth()
   const user = JSON.parse(window.sessionStorage.getItem('user'))
- 
+
   return (
     <section className='App'>
       <Header />

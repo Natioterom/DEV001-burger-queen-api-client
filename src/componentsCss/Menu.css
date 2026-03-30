@@ -101,15 +101,62 @@ font-size: larger;
     width: 50%;
 }
 @media (min-width: 1025px) {
-    .icon-bell{ 
-        margin-left :1050px;
-        }
-    
   }
   @media (max-width: 1024px) {
-    .icon-bell{ 
-        margin-left :650px;
-        }
-    
   }
-  
+
+.qty-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-qty {
+    background-color: #FFBD59;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    width: 28px;
+    height: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-qty:hover {
+    background-color: #f46919;
+    color: white;
+    transform: scale(1.1);
+}
+
+.btn-minus {
+    background-color: #eee;
+    color: #555;
+}
+
+.btn-minus:hover {
+    background-color: #c0392b;
+    color: #fff;
+}
+
+.order-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-delete-item {
+    font-size: 1.4rem;
+    color: #e74c3c;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-delete-item:hover {
+    color: #c0392b;
+    transform: scale(1.2);
+}
+

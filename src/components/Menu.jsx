@@ -10,7 +10,7 @@ function Menu () {
   const [db, setDb] = useState([])
   const [inputName, setInputName] = useState('')
   const [isBreackFast, setIsBreackFast] = useState(true)
-  const [ uniqueProducts, setUniqueProducts ] = useState([])
+  const [uniqueProducts, setUniqueProducts] = useState([])
   const { items, setItems } = useContext(ProductContext)
 
   const navigate = useNavigate()
@@ -36,10 +36,17 @@ function Menu () {
   }, [])
 
   useEffect(() => {
-    // Crear un array unico con propiedad cantidad a partir de items
-    const products = items.map(item => { return { ...item, quantity: items.filter(e => e.productName === item.productName).length } })
-    const setProducts = new Set(products.map(JSON.stringify))
-    setUniqueProducts(Array.from(setProducts).map(JSON.parse))
+    // Agrupar productos de forma robusta por nombre
+    const grouped = items.reduce((acc, item) => {
+      const existing = acc.find(p => p.productName === item.productName)
+      if (existing) {
+        existing.quantity += 1
+      } else {
+        acc.push({ ...item, quantity: 1 })
+      }
+      return acc
+    }, [])
+    setUniqueProducts(grouped)
   }, [items])
 
   const alertUser = (e) => {
@@ -70,35 +77,59 @@ function Menu () {
 
   // Envia el pedido a la base de datos
   const handleSendProduct = () => {
+    const user = JSON.parse(window.sessionStorage.getItem('user'))
+    const token = user?.accessToken
+
+    if (!inputName) return swal('Atención', 'Por favor ingresa el nombre del cliente', 'warning')
+    if (uniqueProducts.length === 0) return swal('Atención', 'El pedido está vacío', 'warning')
+
     const data = {
       state: 'Pendiente',
       clientName: inputName,
       order: uniqueProducts,
       idWaiter: user.user.id,
-      date
+      date: new Date().toISOString()
     }
+
     const options = {
       method: 'POST',
       body: JSON.stringify(data),
-      headers: { 'content-type': 'application/json' }
+      headers: { 
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
     }
-    fetch('https://api-rest-three.vercel.app/orders', options)
-    setItems([])
-    setInputName('')
-    swal('Pedido enviado a cocina', '', 'success')
+
+    fetch('http://localhost:3001/orders', options)
+      .then(res => {
+        if (!res.ok) throw new Error()
+        setItems([])
+        setInputName('')
+        swal('Pedido enviado a cocina', '', 'success')
+      })
+      .catch(() => {
+        swal('Error', 'No se pudo enviar el pedido a la cocina', 'error')
+      })
   }
 
-  // Elimina productos seleccionados
+  // Aumentar cantidad de producto
+  const handleAddOne = (item) => {
+    setItems([...items, { productName: item.productName, cost: item.cost }])
+  }
+
+  // Disminuye productos seleccionados
   const handleDelete = (item) => {
-    const positionArr = items.indexOf(items.find(el => el.productName === item.productName))
-    if (item.quantity > 1) {
-      item.quantity = item.quantity - 1
-      setUniqueProducts([...uniqueProducts])
-      setItems(items.filter((_, i) => items.indexOf(items[positionArr]) !== i))
-    } else {
-      setUniqueProducts(uniqueProducts.filter((_, i) => uniqueProducts.indexOf(item) !== i))
-      setItems(items.filter((_, i) => items.indexOf(items[positionArr]) !== i))
+    const indexToRemove = items.findIndex(el => el.productName === item.productName)
+    if (indexToRemove !== -1) {
+      const newItems = [...items]
+      newItems.splice(indexToRemove, 1)
+      setItems(newItems)
     }
+  }
+
+  // Elimina todo el grupo de un producto
+  const handleRemoveAll = (item) => {
+    setItems(items.filter(el => el.productName !== item.productName))
   }
 
   const orders = () => {
@@ -107,7 +138,6 @@ function Menu () {
 
   return (
     <>
-      <span className='icon-bell' onClick={orders}> <Orders /> </span>
       <button className='btn-click' onClick={handleClickBreakFast}> Desayuno</button>
       <button className='btn-click-user' onClick={handleClickLunchDinner}> Almuerzo/Cena</button>
       <div className='container-menu-check'>
@@ -142,13 +172,19 @@ function Menu () {
             {
               uniqueProducts.map(item => {
                 return (
-                  <div key={Math.random().toString(36).replace(/[^a-z]+/g, '')} className='container-check-list'>
+                  <div key={item.productName} className='container-check-list'>
                     <Check
                       quantity={item.quantity}
                       cost={item.cost * item.quantity}
                       name={item.productName}
                     />
-                    <span className='icon-trash-o' onClick={() => handleDelete(item)} />
+                    <div className='order-actions'>
+                      <div className='qty-buttons'>
+                        <button className='btn-qty btn-minus' onClick={() => handleDelete(item)}>-</button>
+                        <button className='btn-qty btn-plus' onClick={() => handleAddOne(item)}>+</button>
+                      </div>
+                      <span className='icon-trash-o btn-delete-item' onClick={() => handleRemoveAll(item)} />
+                    </div>
                   </div>
                 )
               })

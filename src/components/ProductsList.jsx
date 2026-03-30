@@ -1,109 +1,142 @@
-import swal from 'sweetalert'
-import { useEffect, useState, useRef, useContext } from 'react'
-import { ModalProducts } from './ModalProducts'
-import ProductContext from './DataContext'
+import { useState, useEffect } from 'react'
 
 export const ProductList = () => {
   const [db, setDb] = useState([])
-  const [borrar, setBorrar] = useState(false)
-  const [isEdit, setIsEdit] = useState(null)
-  const { edit, setEdit } = useContext(ProductContext)
-  const products = useRef({})
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    price: '',
+    type: 'breakFast'
+  })
+  const [editRow, setEditRow] = useState(null)
+
+  const URL = 'http://localhost:3000/products'
+
+  const refreshList = async () => {
+    const res = await fetch(URL)
+    const data = await res.json()
+    setDb(data)
+  }
 
   useEffect(() => {
-    const petition = async () => {
-      const data = await fetch('https://api-rest-three.vercel.app/products')
-      const res = await data.json()
-      setDb(res)
+    refreshList()
+  }, [])
+
+  const handleChange = (e, id = null) => {
+    const { name, value } = e.target
+
+    if (id) {
+      setDb(db.map(p => p.id === id ? { ...p, [name]: value } : p))
+    } else {
+      setNewProduct({ ...newProduct, [name]: value })
     }
-    petition()
-  }, [borrar, edit])
+  }
 
-  const handleDelete = (id) => {
-    swal({
-      title: '¿Estás seguro que quiere elimar este producto?',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true
+  const handleAdd = async () => {
+    if (!newProduct.name || !newProduct.price) return window.alert('Completa los campos')
+
+    await fetch(URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProduct)
     })
-      .then((willDelete) => {
-        if (willDelete) {
-          const option = {
-            method: 'DELETE',
-            body: JSON.stringify(db),
-            headers: { 'content-type': 'application/json' }
-          }
-          fetch(`https://api-rest-three.vercel.app/products/${id}`, option)
-          setBorrar(!borrar)
-          swal('El producto ha sido eliminado!', {
-            icon: 'success'
-          })
-        } else {
-          swal('Producto no eliminado!')
-        }
-      })
-    setEdit(!edit)
-  }
-  const handleEdit = (product) => {
-    products.current = product
-    setEdit(!edit)
-    setIsEdit(true)
+
+    setNewProduct({ name: '', price: '', type: 'breakFast' })
+    refreshList()
   }
 
-  const handleAdd = () => {
-    setIsEdit(false)
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Eliminar producto?')) {
+      await fetch(`${URL}/${id}`, { method: 'DELETE' })
+      refreshList()
+    }
   }
+
+  const handleSave = async (product) => {
+    await fetch(`${URL}/${product.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(product)
+    })
+
+    setEditRow(null)
+    refreshList()
+  }
+
   return (
-    <><button type='button' className='btn btn-success' data-bs-toggle='modal' data-bs-target='#staticBackdrop' onClick={handleAdd}>Agregar Producto</button>
-      <article className='container-employee'>
-        <div className='container-employee-list'>
-          <table className='table'>
-            <thead>
-              <tr>
-                <th className='col' scope='col'>ID</th>
-                <th className='col' scope='col'>Nombre</th>
-                <th className='col' scope='col'>Precio</th>
-                <th className='col' scope='col'>Tipo</th>
-                <th className='col' scope='col'>Fecha</th>
-                <th className='col' scope='col'>Eliminar</th>
-                <th className='col' scope='col'>Editar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                    db.map((product, index) => {
-                      return (
-                        <tr key={product.id}>
-                          <th scope='row'>{index}</th>
-                          <td className='celdas'>{product.name}</td>
-                          <td className='celdas'>{product.price}</td>
-                          <td className='celdas'>{
-                         product.type === 'breakFast'
-                           ? 'Desayuno'
-                           : 'Almuerzo/Cena'
-}
-                          </td>
-                          <td className='celdas'>{product.dataEntry.slice(0, 10).replaceAll('-', '/')}</td>
-                          <td className='celdas'>
-                            <button type='button' className='btn btn-outline-danger' onClick={() => handleDelete(product.id)}>Eliminar</button>
-                          </td>
-                          <td className='celdas'>
-                            <button type='button' className='btn btn-outline-info' data-bs-toggle='modal' data-bs-target='#staticBackdrop' onClick={() => { handleEdit(product) }}>
-                              Editar
-                            </button>
-                          </td>
-                        </tr>
-                      )
-                    })
-                }
+    <div className='container mt-4'>
+      <h3>Productos</h3>
 
-            </tbody>
-          </table>
-        </div>
-        <ModalProducts isEdit={isEdit} name={products.current.name} price={products.current.price} product={products.current} />
-      </article>
+      <table className='table table-bordered table-hover'>
+        <thead className='table-dark'>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-    </>
+        <tbody>
+          <tr>
+            <td>+</td>
+            <td><input name='name' value={newProduct.name} onChange={handleChange} className='form-control' /></td>
+            <td><input type='number' name='price' value={newProduct.price} onChange={handleChange} className='form-control' /></td>
+            <td>
+              <select name='type' value={newProduct.type} onChange={handleChange} className='form-select'>
+                <option value='breakFast'>Desayuno</option>
+                <option value='lunch'>Almuerzo/Cena</option>
+              </select>
+            </td>
+            <td><button className='btn btn-success btn-sm' onClick={handleAdd}>Agregar</button></td>
+          </tr>
 
+          {db.map((product, index) => (
+            <tr key={product.id}>
+              <td>{index + 1}</td>
+
+              <td>
+                {editRow === product.id
+                  ? <input name='name' value={product.name} onChange={(e) => handleChange(e, product.id)} className='form-control' />
+                  : product.name}
+              </td>
+
+              <td>
+                {editRow === product.id
+                  ? <input type='number' name='price' value={product.price} onChange={(e) => handleChange(e, product.id)} className='form-control' />
+                  : `$${product.price}`}
+              </td>
+
+              <td>
+                {editRow === product.id
+                  ? (
+                    <select name='type' value={product.type} onChange={(e) => handleChange(e, product.id)} className='form-select'>
+                      <option value='breakFast'>Desayuno</option>
+                      <option value='lunch'>Almuerzo/Cena</option>
+                    </select>
+                    )
+                  : (product.type === 'breakFast' ? 'Desayuno' : 'Almuerzo/Cena')}
+              </td>
+
+              <td>
+                {editRow === product.id
+                  ? (
+                    <>
+                      <button className='btn btn-primary btn-sm me-2' onClick={() => handleSave(product)}>Guardar</button>
+                      <button className='btn btn-secondary btn-sm' onClick={() => setEditRow(null)}>Cancelar</button>
+                    </>
+                    )
+                  : (
+                    <>
+                      <button className='btn btn-warning btn-sm me-2' onClick={() => setEditRow(product.id)}>Editar</button>
+                      <button className='btn btn-danger btn-sm' onClick={() => handleDelete(product.id)}>Eliminar</button>
+                    </>
+                    )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
